@@ -11,6 +11,8 @@ recognition.interimResults = false;
 recognition.maxAlternatives = 1;
 
 var g_Controller = false;
+var removeListenerBorb = false;
+var contador = 0;
 var saida = document.querySelector('.output');
 
 document.body.addEventListener('click',() =>{ recognition.start();} );
@@ -25,46 +27,136 @@ recognition.onresult = function(event)
     disparaEvento(texto);
 }
 
-let p = new Promise ( (resolve, reject) => {
-  setTimeout(() => {
-    if(g_Controller)
-        resolve('A promessa foi resolvida');
-    else  
-        reject ('A promessa foi rejeitada.');
-  }, 10000);
-})
+let el = document.querySelector('.pro');
 
 //1-IMPLEMENTAR..... FUNCAO QUE IRA DISPARAR A ACAO CORRESPONDENTE A PALAVRA
 function disparaEvento(palavra)
 {
-  if (palavra == "escopo"){
+  if (palavra == "escopo"){  
     console.log('Recebeu escopo');
+    contador = 0;
     console.log(g_Controller);
     g_Controller = !g_Controller;
     console.log(g_Controller);
   }
   else if (palavra == "promessa"){
     console.log('Recebeu promessa');
+    console.log('g_Controller: ' +g_Controller);
+    contador = 0;
 
-    p.then( (mensagem) =>
-             {alert(mensagem);} )
-        .catch( (mensagem) =>
-            {alert(mensagem);});
+    //2-IMPLEMENTAR FUNCAO DA PROMESSA
+    let p = new Promise( (resolve, reject) => {
+        setTimeout(() => {
+        if(g_Controller)
+            resolve('A promessa foi resolvida');
+        if(!g_Controller)  
+            reject('A promessa foi rejeitada')
+        }, 10000);
+    });
+
+    p.then((mensagem) => {
+        alert(mensagem); 
+    }).catch((mensagem) =>{
+        alert(mensagem);
+    });
   }
-  else if (palavra == "borbulhamento")
+  else if (palavra == "borbulhamento"){
     console.log('Recebeu borbulhamento');
-  else
+    contador = 0;
+    
+    if (removeListenerBorb) {
+        el.removeEventListener('click');
+    }  
+
+    el.addEventListener('click',(event) =>{ 
+        event.stopPropagation();
+        alert(event.target);
+        document.body.removeEventListener('click');
+    });
+    removeListenerBorb = true; 
+
+  }
+  else {
+    contador++;    
     console.log('Recebeu outra palavra');
+    console.log('Contador = ' + contador);;
+    
+    if(contador>=4) {    
+        document.body.removeEventListener('click', () =>{ recognition.start();})
+    }
+  }
 
 }
 
+/*
 recognition.onspeechend = function() {
     recognition.stop();
-  }
+}*/
   
+//3-IMPLEMENTAR ENVENTO TROCA DE CORES  
+  /*window.onload = function(){
+	cores = ['#999', '#03f', '#ff6', '#F00', '#60c', '#ff0'];
 
-//2-IMPLEMENTAR FUNCAO DA PROMESSA
+	elementos = [document.getElementsByClassName("es")[0], 
+	document.getElementsByClassName("pr")[0], 
+	document.getElementsByClassName("cl")[0],
+	document.getElementsByClassName("pro")[0], 
+	document.getElementsByClassName("ca")[0],
+	document.getElementsByClassName("bo")[0] 
+	];
+	trocaCoresAntiHorario(1);
+	//trocaCoresHorario(1);
+
+	function trocaCoresAntiHorario(vez){
+		i = 0;
+		for(elemento of elementos){
+			elemento.style.backgroundColor = cores[vez+i];
+			
+			if(vez+i<5){
+				console.log("valor de vez+i=" + (vez+i));
+				i++;
+			}else{
+				console.log("chegou no 5");
+				console.log("valor de vez+i=" + (vez+i));
+				i = 0 - vez;
+			}
+		}
+		if (vez < 5) {
+			vez++;
+		}else{
+			vez = 0;
+		}
+		setTimeout(() => {trocaCoresHorario(vez)}, 1000);
+	}
+
+	function trocaCoresHorario(vez){
+		i = 0;
+		for(elemento of elementos){
+			elemento.style.backgroundColor = cores[5- (vez+i)];
+			console.log("valor de vez = "+ vez);
+			console.log("valor de i = " + i);
+			console.log("valor de 5-(vez+i) =" + (5- (vez+i)));
+			if(vez+i > 0){
+				i--;
+			}else{
+				console.log("chegou no 0");
+				i = 5 - vez;
+			}
+		}
+		if (vez < 5) {
+			vez++;
+		}else{
+			vez = 0;
+		}
+		setTimeout(() => {trocaCoresAntiHorario(vez)}, 1000);
+	}
+
+}*/
+
+
+
 
 //4 -INCLUIR OS EVENTOS DE CLICK NOS ELEMENTOS <TD> E <TR> DA PAGINA
+
 
 //5 -METODO PARA ALTERAR O BACKGROUND DAS CELULAS

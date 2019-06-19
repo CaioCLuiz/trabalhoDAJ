@@ -12,7 +12,8 @@ recognition.maxAlternatives = 1;
 
 var g_Controller = false;
 var removeListenerBorb = false;
-var contador = 0;
+var contador_erro = 0;
+var tentativa = 0;
 var saida = document.querySelector('.output');
 
 document.body.addEventListener('click',() =>{ recognition.start();} );
@@ -32,9 +33,10 @@ let el = document.querySelector('.pro');
 //1-IMPLEMENTAR..... FUNCAO QUE IRA DISPARAR A ACAO CORRESPONDENTE A PALAVRA
 function disparaEvento(palavra)
 {
+  tentativa++;
   if (palavra == "escopo"){  
     console.log('Recebeu escopo');
-    contador = 0;
+    contador_erro = 0;
     console.log(g_Controller);
     g_Controller = !g_Controller;
     console.log(g_Controller);
@@ -42,30 +44,39 @@ function disparaEvento(palavra)
   else if (palavra == "promessa"){
     console.log('Recebeu promessa');
     console.log('g_Controller: ' +g_Controller);
-    contador = 0;
+    contador_erro = 0;
 
     //2-IMPLEMENTAR FUNCAO DA PROMESSA
     let p = new Promise( (resolve, reject) => {
         setTimeout(() => {
-        if(g_Controller)
+        if(g_Controller){
             resolve('A promessa foi resolvida');
+        }   
         if(!g_Controller)  
             reject('A promessa foi rejeitada')
         }, 10000);
     });
 
     p.then((mensagem) => {
-        alert(mensagem); 
+      if(tentativa % 2 == 0)
+        trocaClassesHorario(0);
+      else
+        trocaClassesAntiHorario(0);
+
     }).catch((mensagem) =>{
         alert(mensagem);
     });
   }
   else if (palavra == "borbulhamento"){
     console.log('Recebeu borbulhamento');
-    contador = 0;
+    contador_erro = 0;
     
     if (removeListenerBorb) {
-        el.removeEventListener('click');
+        el.removeEventListener('click', (event) =>{ 
+          event.stopPropagation();
+          alert(event.target);
+          document.body.removeEventListener('click');
+      });
     }  
 
     el.addEventListener('click',(event) =>{ 
@@ -77,25 +88,19 @@ function disparaEvento(palavra)
 
   }
   else {
-    contador++;    
+    contador_erro++;    
     console.log('Recebeu outra palavra');
-    console.log('Contador = ' + contador);;
+    console.log('Contador Erro= ' + contador_erro);;
     
-    if(contador>=4) {    
+    if(contador_erro>=4) {    
         document.body.removeEventListener('click', () =>{ recognition.start();})
     }
   }
 
 }
-
-/*
-recognition.onspeechend = function() {
-    recognition.stop();
-}*/
   
 //3-IMPLEMENTAR ENVENTO TROCA DE CORES  
-  /*window.onload = function(){
-	cores = ['#999', '#03f', '#ff6', '#F00', '#60c', '#ff0'];
+  classes = ['es', 'pr', 'cl', 'pro', 'ca', 'bo'];
 
 	elementos = [document.getElementsByClassName("es")[0], 
 	document.getElementsByClassName("pr")[0], 
@@ -104,35 +109,44 @@ recognition.onspeechend = function() {
 	document.getElementsByClassName("ca")[0],
 	document.getElementsByClassName("bo")[0] 
 	];
-	trocaCoresAntiHorario(1);
+	//trocaCoresAntiHorario(1);
 	//trocaCoresHorario(1);
 
-	function trocaCoresAntiHorario(vez){
-		i = 0;
+	function trocaClassesAntiHorario(vez){
+    i = 1;
 		for(elemento of elementos){
-			elemento.style.backgroundColor = cores[vez+i];
-			
-			if(vez+i<5){
-				console.log("valor de vez+i=" + (vez+i));
+      if(vez+i<5){
+        elemento.className = classes[vez+i];
+        console.log("vez=" + (vez));
+        console.log("valor de vez+i=" + (vez+i));
 				i++;
 			}else{
-				console.log("chegou no 5");
-				console.log("valor de vez+i=" + (vez+i));
-				i = 0 - vez;
+        if(vez == 5){
+          elemento.className = classes[i - 1];
+          i++;
+        }
+        else{  
+          elemento.className = classes[vez + 1];
+
+          console.log("chegou no 5");
+          console.log("vez=" + (vez));
+          console.log("valor de vez+i=" + (vez+i));
+          i = 0 - vez;
+        }
 			}
 		}
 		if (vez < 5) {
-			vez++;
+      vez++;
+      setTimeout(() => {trocaClassesAntiHorario(vez)}, 1000);
 		}else{
 			vez = 0;
 		}
-		setTimeout(() => {trocaCoresHorario(vez)}, 1000);
 	}
 
-	function trocaCoresHorario(vez){
+	function trocaClassesHorario(vez){
 		i = 0;
 		for(elemento of elementos){
-			elemento.style.backgroundColor = cores[5- (vez+i)];
+      elemento.className = classes[5- (vez+i)];
 			console.log("valor de vez = "+ vez);
 			console.log("valor de i = " + i);
 			console.log("valor de 5-(vez+i) =" + (5- (vez+i)));
@@ -144,14 +158,12 @@ recognition.onspeechend = function() {
 			}
 		}
 		if (vez < 5) {
-			vez++;
+      vez++;
+      setTimeout(() => {trocaClassesHorario(vez)}, 1000);
 		}else{
 			vez = 0;
 		}
-		setTimeout(() => {trocaCoresAntiHorario(vez)}, 1000);
 	}
-
-}*/
 
 
 

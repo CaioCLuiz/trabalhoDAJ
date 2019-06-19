@@ -28,8 +28,6 @@ recognition.onresult = function(event)
     disparaEvento(texto);
 }
 
-let el = document.querySelector('.pro');
-
 //1-IMPLEMENTAR..... FUNCAO QUE IRA DISPARAR A ACAO CORRESPONDENTE A PALAVRA
 function disparaEvento(palavra)
 {
@@ -57,7 +55,7 @@ function disparaEvento(palavra)
         }, 10000);
     });
 
-    p.then((mensagem) => {
+    p.then(() => {
       if(tentativa % 2 == 0)
         trocaClassesHorario(0);
       else
@@ -70,21 +68,7 @@ function disparaEvento(palavra)
   else if (palavra == "borbulhamento"){
     console.log('Recebeu borbulhamento');
     contador_erro = 0;
-    
-    if (removeListenerBorb) {
-        el.removeEventListener('click', (event) =>{ 
-          event.stopPropagation();
-          alert(event.target);
-          document.body.removeEventListener('click');
-      });
-    }  
-
-    el.addEventListener('click',(event) =>{ 
-        event.stopPropagation();
-        alert(event.target);
-        document.body.removeEventListener('click');
-    });
-    removeListenerBorb = true; 
+    trataBorbulhamento();
 
   }
   else {
@@ -98,77 +82,89 @@ function disparaEvento(palavra)
   }
 
 }
-  
-//3-IMPLEMENTAR ENVENTO TROCA DE CORES  
-  classes = ['es', 'pr', 'cl', 'pro', 'ca', 'bo'];
-
-	elementos = [document.getElementsByClassName("es")[0], 
-	document.getElementsByClassName("pr")[0], 
-	document.getElementsByClassName("cl")[0],
-	document.getElementsByClassName("pro")[0], 
-	document.getElementsByClassName("ca")[0],
-	document.getElementsByClassName("bo")[0] 
-	];
-	//trocaCoresAntiHorario(1);
-	//trocaCoresHorario(1);
-
-	function trocaClassesAntiHorario(vez){
-    i = 1;
-		for(elemento of elementos){
-      if(vez+i<5){
-        elemento.className = classes[vez+i];
-        console.log("vez=" + (vez));
-        console.log("valor de vez+i=" + (vez+i));
-				i++;
-			}else{
-        if(vez == 5){
-          elemento.className = classes[i - 1];
-          i++;
-        }
-        else{  
-          elemento.className = classes[vez + 1];
-
-          console.log("chegou no 5");
-          console.log("vez=" + (vez));
-          console.log("valor de vez+i=" + (vez+i));
-          i = 0 - vez;
-        }
-			}
-		}
-		if (vez < 5) {
-      vez++;
-      setTimeout(() => {trocaClassesAntiHorario(vez)}, 1000);
-		}else{
-			vez = 0;
-		}
-	}
-
-	function trocaClassesHorario(vez){
-		i = 0;
-		for(elemento of elementos){
-      elemento.className = classes[5- (vez+i)];
-			console.log("valor de vez = "+ vez);
-			console.log("valor de i = " + i);
-			console.log("valor de 5-(vez+i) =" + (5- (vez+i)));
-			if(vez+i > 0){
-				i--;
-			}else{
-				console.log("chegou no 0");
-				i = 5 - vez;
-			}
-		}
-		if (vez < 5) {
-      vez++;
-      setTimeout(() => {trocaClassesHorario(vez)}, 1000);
-		}else{
-			vez = 0;
-		}
-	}
-
-
-
 
 //4 -INCLUIR OS EVENTOS DE CLICK NOS ELEMENTOS <TD> E <TR> DA PAGINA
+function trataBorbulhamento(){
 
+  let el = document.querySelector('.pro');
 
-//5 -METODO PARA ALTERAR O BACKGROUND DAS CELULAS
+  if (removeListenerBorb) {
+    el.removeEventListener('click', (event) =>{ 
+      event.stopPropagation();
+      alert(event.target);
+      document.body.removeEventListener('click');
+  });
+}  
+  el.addEventListener('click',(event) =>{ 
+      event.stopPropagation();
+      alert(event.target);
+      document.body.removeEventListener('click');
+  });
+
+  removeListenerBorb = true;
+
+}
+
+//5 -METODO PARA ALTERAR O BACKGROUND DAS CELULAS  
+classes = ['es', 'pr', 'cl', 'pro', 'ca', 'bo'];
+
+elementos = [document.getElementsByClassName("es")[0], 
+document.getElementsByClassName("pr")[0], 
+document.getElementsByClassName("cl")[0],
+document.getElementsByClassName("pro")[0], 
+document.getElementsByClassName("ca")[0],
+document.getElementsByClassName("bo")[0] 
+];
+
+function trocaClassesAntiHorario(vez){
+  i = 1;
+  for(elemento of elementos){
+    if(vez+i<5){
+      elemento.className = classes[vez+i];
+      console.log("vez=" + (vez));
+      console.log("valor de vez+i=" + (vez+i));
+      i++;
+    }else{
+      if(vez == 5){
+        elemento.className = classes[i - 1];
+        i++;
+      }
+      else{  
+        elemento.className = classes[vez + 1];
+
+        console.log("chegou no 5");
+        console.log("vez=" + (vez));
+        console.log("valor de vez+i=" + (vez+i));
+        i = 0 - vez;
+      }
+    }
+  }
+  if (vez < 5) {
+    vez++;
+    setTimeout(() => {trocaClassesAntiHorario(vez)}, 1000);
+  }else{
+    vez = 0;
+  }
+}
+
+function trocaClassesHorario(vez){
+  i = 0;
+  for(elemento of elementos){
+    elemento.className = classes[5- (vez+i)];
+    console.log("valor de vez = "+ vez);
+    console.log("valor de i = " + i);
+    console.log("valor de 5-(vez+i) =" + (5- (vez+i)));
+    if(vez+i > 0){
+      i--;
+    }else{
+      console.log("chegou no 0");
+      i = 5 - vez;
+    }
+  }
+  if (vez < 5) {
+    vez++;
+    setTimeout(() => {trocaClassesHorario(vez)}, 1000);
+  }else{
+    vez = 0;
+  }
+}

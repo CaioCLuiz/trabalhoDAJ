@@ -10,11 +10,13 @@ body {
     height: inherit;
     overflow: hidden;
 }
+
 h1, p {
     font-family: sans-serif;
     text-align: center;
     padding: 20px;
 }
+
 div {
     height: 100px;
     overflow: auto;
@@ -22,16 +24,16 @@ div {
     bottom: 0px;
     right: 0;
     left: 0;
-    background-color: rgba(255,255,255,0.2);
+    background-color: rgba(255, 255, 255, 0.2);
 }
-    
+
 .hintsspan {
-    text-shadow: 0px0px6pxrgba(255,255,255,0.7);
+    text-shadow: 0 px0px6pxrgba(255, 255, 255, 0.7);
 }
 
 table {
-    width: 100%; 
-    border-collapse: collapse; 
+    width: 100%;
+    border-collapse: collapse;
 }
 
 #daj th {
@@ -52,10 +54,11 @@ table {
     background: #999;
 }
 
-#daj .pr { 
+#daj .pr {
     background: #03f;
     color: #fff;
 }
+
 #daj .cl {
     background: #ff6;
 }
@@ -63,6 +66,7 @@ table {
 #daj .bo {
     background: #ff0;
 }
+
 #daj.ca {
     background: #60c;
     color: #fff;

@@ -28,9 +28,9 @@ recognition.onresult = function(event)
     disparaEvento(texto);
 }
 
-window.onload = function(){
+/*window.onload = function(){
   trocaClassesAntiHorario(0);
-}
+}*/
 
 //1-IMPLEMENTAR..... FUNCAO QUE IRA DISPARAR A ACAO CORRESPONDENTE A PALAVRA
 function disparaEvento(palavra)
@@ -127,27 +127,28 @@ document.getElementsByClassName("bo")[0]
 function trocaClassesAntiHorario(vez){
   i = 0;
   for(elemento of elementos){
-    if(vez+i<5){
-      elemento.className = classes[vez+i];
+    elemento.className = classes[vez+i];
+
+    if(vez+i<5){  
       console.log("vez=" + (vez));
       console.log("valor de vez+i=" + (vez+i));
       i++;
     }else{
-      /*if(vez == 5){
-        elemento.className = classes[i - 1];
+      if(vez == 6){
+        elemento.className = classes[i];
         i++;
       }
-      else{*/  
-        //elemento.className = classes[vez + 1];
+      else{  
+        //elemento.className = classes[vez];
 
         console.log("chegou no 5");
         //console.log("vez=" + (vez));
         console.log("valor de vez+i=" + (vez+i));
         i = 0 - vez;
       }
-    //}
+    }
   }
-  if (vez < 5) {
+  if (vez < 6) {
     vez++;
     setTimeout(() => {trocaClassesAntiHorario(vez)}, 1000);
   }

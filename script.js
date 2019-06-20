@@ -41,7 +41,7 @@ let verificaVariavelGlobal = new Promise((resolve, reject) => {
 });
 
 // Array de cores usadas
-let cores = ['#999', '#03f', '#ff6', '#F00', '#60c', '#ff0'];
+let cores = ['#999', '#03f', '#ff6', '#f00', '#fff', '#ff0'];
 
 // Seleciona as classes das td da table #daj
 let elementos = [
@@ -54,46 +54,42 @@ let elementos = [
 ];
 
 // Função de troca de cores no sentido anti-horário
-function trocaCoresAntiHorario(vez) {
+function trocaCoresAntiHorario() {
     let i = 0;
-    for (elemento of elementos) {
-        elemento.style.backgroundColor = cores[vez + i];
 
-        if (vez + i < 5) {
-            console.log("valor de vez+i=" + (vez + i));
+    for (elemento of elementos) {
+        console.log('Antes a cor era ' + elemento.style.backgroundColor);
+
+        if (i === 0) {
+            elemento.style.backgroundColor = cores[1];
             i++;
+        } else if (i === 5) {
+            elemento.style.backgroundColor = cores[0];
         } else {
-            console.log("chegou no 5");
-            console.log("valor de vez+i=" + (vez + i));
-            i = 0 - vez;
+            elemento.style.backgroundColor = cores[i + 1];
+            i++;
         }
-    }
-    if (vez < 5) {
-        vez++;
-    } else {
-        vez = 0;
+
+        console.log('Agora a cor é ' + elemento.style.backgroundColor);
     }
 }
 
 // Função de troca de cores no sentido horário
-function trocaCoresHorario(vez) {
-    let i = 0;
+function trocaCoresHorario() {
+    let i = 5;
+
     for (elemento of elementos) {
-        elemento.style.backgroundColor = cores[5 - (vez + i)];
-        console.log("valor de vez = " + vez);
-        console.log("valor de i = " + i);
-        console.log("valor de 5-(vez+i) =" + (5 - (vez + i)));
-        if (vez + i > 0) {
+        console.log('Antes a cor era ' + elemento.style.backgroundColor);
+
+        if (i === 5) {
+            elemento.style.backgroundColor = cores[5];
             i--;
         } else {
-            console.log("chegou no 0");
-            i = 5 - vez;
+            elemento.style.backgroundColor = cores[(5 - i) - 1];
+            i--;
         }
-    }
-    if (vez < 5) {
-        vez++;
-    } else {
-        vez = 0;
+
+        console.log('Agora a cor é ' + elemento.style.backgroundColor);
     }
 }
 
@@ -101,7 +97,6 @@ function trocaCoresHorario(vez) {
 function disparaEvento(palavra) {
     if (palavra === "escopo") {
         console.log('Recebeu escopo');
-        console.log("Variável g_Controller é " + g_Controller);
         g_Controller = !g_Controller;
         console.log("Variável g_Controller é " + g_Controller);
     }
@@ -111,18 +106,29 @@ function disparaEvento(palavra) {
         verificaVariavelGlobal
             .then((mensagem) => {
                 alert(mensagem);
-                trocaCoresHorario(1);
+                trocaCoresHorario();
             })
             .catch((mensagem) => {
                 alert(mensagem);
-                trocaCoresAntiHorario(1);
+                trocaCoresAntiHorario();
             });
     }
-    else if (palavra === "borbulhamento")
+    else if (palavra === "borbulhamento") {
         console.log('Recebeu borbulhamento');
+        for (elemento of elementos) {
+            console.log(elemento);
+            if (elemento.style.backgroundColor === cores[3]) {
+                console.log(elemento);
+            }
+        }
+
+        // document.body.addEventListener('click', () => {
+        //     recognition.start();
+        // });
+        // document.getElementById("myDIV").removeEventListener("mousemove", myFunction);
+    }
     else
         console.log('Recebeu outra palavra');
-
 }
 
 recognition.onspeechend = function () {

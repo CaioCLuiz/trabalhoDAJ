@@ -28,6 +28,10 @@ recognition.onresult = function(event)
     disparaEvento(texto);
 }
 
+window.onload = function(){
+  trocaClassesAntiHorario(0);
+}
+
 //1-IMPLEMENTAR..... FUNCAO QUE IRA DISPARAR A ACAO CORRESPONDENTE A PALAVRA
 function disparaEvento(palavra)
 {
@@ -52,7 +56,7 @@ function disparaEvento(palavra)
         }   
         if(!g_Controller)  
             reject('A promessa foi rejeitada')
-        }, 10000);
+        }, 1000);
     });
 
     p.then(() => {
@@ -92,14 +96,18 @@ function trataBorbulhamento(){
     el.removeEventListener('click', (event) =>{ 
       event.stopPropagation();
       alert(event.target);
-      document.body.removeEventListener('click');
+      //document.body.removeEventListener('click', () =>{ recognition.start();});
   });
-}  
-  el.addEventListener('click',(event) =>{ 
-      event.stopPropagation();
-      alert(event.target);
-      document.body.removeEventListener('click');
-  });
+ }
+  else
+  {  
+    el.addEventListener('click',(event) =>{ 
+        event.stopPropagation();
+        alert(event.target);
+    });
+  }  
+
+  //document.body.removeEventListener('click', () =>{ recognition.start();});
 
   removeListenerBorb = true;
 
@@ -117,7 +125,7 @@ document.getElementsByClassName("bo")[0]
 ];
 
 function trocaClassesAntiHorario(vez){
-  i = 1;
+  i = 0;
   for(elemento of elementos){
     if(vez+i<5){
       elemento.className = classes[vez+i];
@@ -125,26 +133,25 @@ function trocaClassesAntiHorario(vez){
       console.log("valor de vez+i=" + (vez+i));
       i++;
     }else{
-      if(vez == 5){
+      /*if(vez == 5){
         elemento.className = classes[i - 1];
         i++;
       }
-      else{  
-        elemento.className = classes[vez + 1];
+      else{*/  
+        //elemento.className = classes[vez + 1];
 
         console.log("chegou no 5");
-        console.log("vez=" + (vez));
+        //console.log("vez=" + (vez));
         console.log("valor de vez+i=" + (vez+i));
         i = 0 - vez;
       }
-    }
+    //}
   }
   if (vez < 5) {
     vez++;
     setTimeout(() => {trocaClassesAntiHorario(vez)}, 1000);
-  }else{
-    vez = 0;
   }
+
 }
 
 function trocaClassesHorario(vez){
@@ -168,3 +175,4 @@ function trocaClassesHorario(vez){
     vez = 0;
   }
 }
+

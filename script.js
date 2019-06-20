@@ -16,7 +16,9 @@ var contador_erro = 0;
 var tentativa = 0;
 var saida = document.querySelector('.output');
 
-document.body.addEventListener('click',() =>{ recognition.start();} );
+var recognitionStart = function(){ recognition.start(); }
+
+document.body.addEventListener('click', recognitionStart );
 recognition.addEventListener('speechend', () =>{ recognition.stop();} );
 recognition.addEventListener('error', (event) =>{ saida.textContent = 'Erro no reconhecimento do texto: '+ event.error;});
 
@@ -77,7 +79,7 @@ function disparaEvento(palavra)
     console.log('Contador Erro= ' + contador_erro);;
     
     if(contador_erro>=4) {    
-        document.body.removeEventListener('click', () =>{ recognition.start();})
+      document.body.removeEventListener('click', recognitionStart );
     }
   }
 

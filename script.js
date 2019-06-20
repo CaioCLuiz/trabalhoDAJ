@@ -28,10 +28,6 @@ recognition.onresult = function(event)
     disparaEvento(texto);
 }
 
-/*window.onload = function(){
-  trocaClassesAntiHorario(0);
-}*/
-
 //1-IMPLEMENTAR..... FUNCAO QUE IRA DISPARAR A ACAO CORRESPONDENTE A PALAVRA
 function disparaEvento(palavra)
 {
@@ -56,7 +52,7 @@ function disparaEvento(palavra)
         }   
         if(!g_Controller)  
             reject('A promessa foi rejeitada')
-        }, 1000);
+        }, 10000);
     });
 
     p.then(() => {
@@ -96,7 +92,6 @@ function trataBorbulhamento(){
     el.removeEventListener('click', (event) =>{ 
       event.stopPropagation();
       alert(event.target);
-      //document.body.removeEventListener('click', () =>{ recognition.start();});
   });
  }
   else
@@ -106,8 +101,6 @@ function trataBorbulhamento(){
         alert(event.target);
     });
   }  
-
-  //document.body.removeEventListener('click', () =>{ recognition.start();});
 
   removeListenerBorb = true;
 
@@ -139,10 +132,8 @@ function trocaClassesAntiHorario(vez){
         i++;
       }
       else{  
-        //elemento.className = classes[vez];
 
         console.log("chegou no 5");
-        //console.log("vez=" + (vez));
         console.log("valor de vez+i=" + (vez+i));
         i = 0 - vez;
       }

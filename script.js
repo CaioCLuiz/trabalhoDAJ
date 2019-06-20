@@ -58,8 +58,6 @@ function trocaCoresAntiHorario() {
     let i = 0;
 
     for (elemento of elementos) {
-        console.log('Antes a cor era ' + elemento.style.backgroundColor);
-
         if (i === 0) {
             elemento.style.backgroundColor = cores[1];
             i++;
@@ -79,8 +77,6 @@ function trocaCoresHorario() {
     let i = 5;
 
     for (elemento of elementos) {
-        console.log('Antes a cor era ' + elemento.style.backgroundColor);
-
         if (i === 5) {
             elemento.style.backgroundColor = cores[5];
             i--;
@@ -115,17 +111,24 @@ function disparaEvento(palavra) {
     }
     else if (palavra === "borbulhamento") {
         console.log('Recebeu borbulhamento');
+
         for (elemento of elementos) {
-            console.log(elemento);
-            if (elemento.style.backgroundColor === cores[3]) {
+            let el = elemento.getAttribute("style");
+            let cl = elemento.getAttribute("class");
+
+            if (el === 'background-color: rgb(255, 0, 0);') {
                 console.log(elemento);
+                console.log(cl);
+
+                recognition.abort();
+                recognition.onspeechend();
+
+                elemento.addEventListener('click', () => {
+                    alert('Olá 1');
+                    recognition.start();
+                }, true);
             }
         }
-
-        // document.body.addEventListener('click', () => {
-        //     recognition.start();
-        // });
-        // document.getElementById("myDIV").removeEventListener("mousemove", myFunction);
     }
     else
         console.log('Recebeu outra palavra');
